@@ -1,44 +1,59 @@
 import random
 
+hands = ['Rock', 'Scissors', 'Paper']
+results = {'win': 'You win!', 'lose': 'You lose!', 'draw': 'It\'s a draw'}
+
 def start_message():
     print('Rock-Paper-Scissors Start!')
 
 def get_player():
-    print('Enter your hand:')
-    my_hand = int(input('0: Rock, 1: Paper, 2: Scissors: '))
-    return my_hand
+    print('Enter your choice:')
+    input_message = ''
+    for index, hand in enumerate(hands):
+        input_message += f"{index}: {hand}, "
+    input_message = input_message[:-2]  # Remove the last comma and space
+    while True:
+        try:
+            choice = int(input(input_message + " : "))
+            if choice in [0, 1, 2]:
+                return choice
+            else:
+                print("Invalid choice. Please enter 0, 1, or 2.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
 def get_computer():
-    comp_hand = random.randint(0, 2)
-    return comp_hand
-
-def view_result(hand_diff):
-    if (hand_diff == -1 or hand_diff == 2):
-        print('You lose!')
-    elif(hand_diff == 1 or hand_diff == -2):
-        print('You Win!')
-    elif hand_diff == 0 :
-        print('it\'s a Draw')
+    return random.randint(0, 2)    
 
 def get_hand_name(hand_number):
-    if hand_number == 0:
-        return 'Rock'
-    elif hand_number == 1:
-        return 'Paper'
-    elif hand_number == 2:
-        return 'Scissors'
-    else:
-        return 'unknown'
-    return choice
+    return hands[hand_number]
 
 def view_hand(player, computer):
-    playerChoice = get_hand_name(player)
-    compChoice = get_hand_name(computer)
-    print(f"Your choice is {playerChoice} and the computer\'s choice is {compChoice} so")
+    print('Your choice is ' + get_hand_name(player))
+    print('Computer\'s choice is ' + get_hand_name(computer))
 
-start_message()
-playersHand = get_player()
-computersHand = get_computer()
-hand_diff = playersHand - computersHand
-view_hand(playersHand, computersHand)
-view_result(hand_diff)
+def get_result(hand_diff):
+    if (hand_diff == -1 or hand_diff == 2):
+        return 'lose'
+    elif(hand_diff == 1 or hand_diff == -2):
+        return 'win'
+    elif hand_diff == 0 :
+        return 'draw'
+    
+def view_result(result):
+    print(results[result])
+def play():
+    start_message()
+    while True:
+        playersHand = get_player()
+        computersHand = get_computer()
+        hand_diff = playersHand - computersHand
+        view_hand(playersHand, computersHand)
+        result = get_result(hand_diff)
+        
+        view_result(result)
+        
+        if result != 'draw':  # Exit the loop if the result is not a draw
+            break
+
+play()
